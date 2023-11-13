@@ -6,9 +6,9 @@ scripts:
   preBackendDeploy: npm install
   preFrontendDeploy: npm run install-prod-sdk && npm install && npm run build
 frontend:
-  path: client/build
+  path: ../client/build
   subdomain: yellow-accurate-wildcat
 packageManager: npm
 workspace:
-  backend: server
-  frontend: client
+  backend: ../server
+  frontend: ../client
