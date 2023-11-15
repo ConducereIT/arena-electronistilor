@@ -24,7 +24,7 @@ function App() {
                 <input
                     style={ { margin: "20px" }}
                     type="text"
-                    placeholder="Enter your name"
+                    placeholder="Enter your name :"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                 />
