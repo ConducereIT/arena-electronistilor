@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { HelloWorldService } from "@genezio-sdk/arena-electronistilor_eu-central-1"
+import { HelloWorldService } from "../src/sdk/helloWorldService.sdk"
+import { Bs0Square } from "react-icons/bs";
 
 function App() {
     const [name, setName] = useState('');
@@ -20,7 +21,7 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
+                <Bs0Square className="App-logo"/>
                 <input
                     style={ { margin: "20px" }}
                     type="text"
