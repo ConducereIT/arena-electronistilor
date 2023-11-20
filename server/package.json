@@ -9,10 +9,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@genezio/types": "^0.1.9"
+    "@genezio/types": "^0.1.9",
+    "@prisma/client": "^5.6.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "prisma": "^5.6.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.9.0",
+    "@types/uuid": "^9.0.7",
     "typescript": "^5.2.2"
   }
 }
