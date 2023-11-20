@@ -5,6 +5,11 @@ export class HelloWorldService {
 
     hello(name: string): string {
         console.log(`Server request receive with parameter ${name}`)
+        return `eu sutn , ${name}!`
+    }
+
+    gof(name: string): string {
+        console.log(`Server request receive with parameter ${name}`)
         return `Hello, ${name}!`
     }
 }

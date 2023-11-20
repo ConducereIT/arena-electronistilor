@@ -1,0 +1,20 @@
+name: arena-electronistilor
+region: eu-central-1
+language: ts
+cloudProvider: genezio
+sdk:
+  language: ts
+  path: ../client/src/sdk
+scripts:
+  preBackendDeploy: npm install
+  preFrontendDeploy: npm install && npm run build
+frontend:
+  path: ../client/build
+  subdomain: yellow-accurate-wildcat
+classes:
+  - path: helloWorld.ts
+    type: jsonrpc
+    methods: []
+  - path: Db.ts
+    type: jsonrpc
+    methods: []

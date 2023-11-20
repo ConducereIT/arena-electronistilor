@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { HelloWorldService } from "@genezio-sdk/arena-electronistilor_eu-central-1"
+import { HelloWorldService } from "../src/sdk/helloWorldService.sdk"
 import { Bs0Square } from "react-icons/bs";
 
 function App() {
