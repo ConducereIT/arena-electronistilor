@@ -1,7 +1,8 @@
 import { PrismaClient } from ".prisma/client";
-import { typeLeaderBoardResponse, typeQuestionsResponse } from "./models/typeGame";
+import { GetAnswersQuickRound, ResponseGetNumberQuestions, UpdateQuickRoundResponse, typeLeaderBoardResponse, typeQuestionsResponse } from "./models/typeGame";
 import { error } from "console";
 import { SessionResponse } from "./models/typeUser";
+import { ok } from "assert";
 
 export class Game {
     prisma: PrismaClient;
@@ -44,6 +45,10 @@ export class Game {
                 }
             })
 
+            return {
+                status: "ok",
+            }
+
         } catch (error) {
             return {
                 status: "error",
@@ -54,14 +59,33 @@ export class Game {
 
     async getQuestion (token: string, questionId: number) : Promise<typeQuestionsResponse>{
         try{
+            const isValid = await this.checkSession(token);
+
+            if (isValid.status == "error"){
+                throw new Error(isValid.errorMessage);
+            }
+
+            const question = await this.prisma.questions.findFirst({where: {id: questionId}}).catch( (error) => {
+                console.log(error);
+                throw new Error ("Invalid Question!");
+            })
+
+            question?.answer?.map ( (event) => {
+                return {
+                    status: "ok",
+                    questions: [question.question, event],
+                    token: token,
+                }
+            })
+
+
             return {
                 status: "ok",
-                
             }
         }catch(error){
             return {
                 status: "error",
-                errorMessage: `${error}`
+                errorMessage: `${error}`,
             }
         }
     }
@@ -90,6 +114,83 @@ export class Game {
             return {
                 status: "error",
                 errorMessage: `${error}`
+            }
+        }
+    }
+
+    async getNumberQuestions (token: string) : Promise<ResponseGetNumberQuestions> {
+        try{
+
+            const isValid = await this.checkSession(token);
+
+            if (isValid.status == "error"){
+                throw new Error ("Invalid Session!");
+            }
+
+            const counter = await this.prisma.questions.count().catch( error => {
+                console.log(error);
+                throw new Error (error);
+            })
+
+            return {
+                status: "ok",
+                numberQuestions: counter,
+            }
+        }catch ( error ){
+            return {
+                status: "error",
+                errorMessage: `${error}`,
+            }
+        }
+    }
+
+    async getAnswersQuickRound (token: string) : Promise<GetAnswersQuickRound>{
+        try {
+            const isValid = await this.checkSession(token);
+
+            if (isValid.status == "error"){
+                throw new Error (isValid.errorMessage);
+            }
+
+            const table = await this.prisma.quickRound.findMany();
+
+            table.map( (event) => {
+                return {
+                    status: "ok",
+                    answer: [event.id, event.teamName, event.teamScore]
+                }
+            })
+
+            return {
+                status: "ok",
+            }
+        } catch (error) {
+            return {
+                status: "error",
+                errorMessage: `${error}`
+            }
+        }
+    }
+    
+    async updateQuickRound (ceva: string[] ,token: string) : Promise<UpdateQuickRoundResponse> {
+        try{
+
+            const isValid = await this.checkSession(token);
+
+            if (isValid.status == "error"){
+                throw new Error(isValid.errorMessage);
+            }
+
+            // await this.prisma.quickRound.update(ceva);
+
+            return {
+                status: "ok",
+            }
+
+        }catch (error){
+            return {
+                status: "error",
+                errorMessage: `${error}`,
             }
         }
     }
