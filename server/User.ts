@@ -105,7 +105,6 @@ export class User{
       try {
         const existingUser = await this.prisma.user.findUnique({where: {email: email}}).catch( (error) => {
           console.log(error);
-          // throw new Error(error);
         });
 
         if (existingUser){
