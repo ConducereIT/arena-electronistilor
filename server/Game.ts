@@ -1,5 +1,5 @@
 import { PrismaClient } from ".prisma/client";
-import { GetAnswersQuickRound, ResponseGetNumberQuestions, UpdateQuickRoundResponse, typeLeaderBoardResponse, typeQuestionsResponse } from "./models/typeGame";
+import { Answers, GetAnswersQuickRound, ResponseGetNumberQuestions, UpdateQuickRoundResponse, typeLeaderBoardResponse, typeQuestionsResponse } from "./models/typeGame";
 import { error } from "console";
 import { SessionResponse } from "./models/typeUser";
 import { ok } from "assert";
@@ -172,7 +172,7 @@ export class Game {
         }
     }
     
-    async updateQuickRound (ceva: string[] ,token: string) : Promise<UpdateQuickRoundResponse> {
+    async updateQuickRound (input: Answers[] ,token: string) : Promise<UpdateQuickRoundResponse> {
         try{
 
             const isValid = await this.checkSession(token);
@@ -181,7 +181,15 @@ export class Game {
                 throw new Error(isValid.errorMessage);
             }
 
-            // await this.prisma.quickRound.update(ceva);
+            for (const event of input) {
+                await this.prisma.quickRound.update({
+                    data: {
+                        text: event.text,
+                        score: event.score,
+                    },
+                });
+            }
+            
 
             return {
                 status: "ok",

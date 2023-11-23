@@ -20,7 +20,7 @@ export type ResponseGetNumberQuestions = {
 
 export type GetAnswersQuickRound = {
     status: string, 
-    answers?: [],
+    answers?: Answers,
     errorMessage?: string,
 }
 
@@ -28,3 +28,9 @@ export type UpdateQuickRoundResponse = {
     status: string,
     errorMessage?: string,
 }
+
+
+export type Answers = {
+    text: string, 
+    score: number, 
+};
