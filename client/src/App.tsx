@@ -1,49 +1,44 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { HelloWorldService } from "../src/sdk/helloWorldService.sdk"
-import { Bs0Square } from "react-icons/bs";
+import "./App.css";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import Login from "./views/Login.view";
+import Home from "./views/Home.view";
+import Register from "./views/Register.view";
+import Quickround from "./views/Quickround.view";
+import Scoredisplay from "./views/Scoredisplay.view";
+import Ranks from "./views/Ranks.view";
+import Mainround from "./views/Mainround.view";
+import Admin from "./views/Admin.view";
+import AdminQuickround from "./views/AdminQuickround.view";
+import AdminAddTeam from "./views/AdminAddTeam.view";
+import AdminAddQuestionMainRound from "./views/AdminAddQuestionMainRound.view";
 
 function App() {
-    const [name, setName] = useState('');
-    const [message, setMessage] = useState('');
-
-    const handleButtonClick = async () => {
-        try {
-            const result = await HelloWorldService.hello(name);
-            setMessage(result);
-        } catch (error) {
-            console.error('Error calling HelloWorldService:', error);
-            setMessage('Error fetching greeting.');
-        }
-    };
-
-    return (
-        <div className="App">
-            <header className="App-header">
-                <Bs0Square className="App-logo"/>
-                <input
-                    style={ { margin: "20px" }}
-                    type="text"
-                    placeholder="Enter your name :"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <button onClick={handleButtonClick}>Greet</button>
-                <div style={{ marginTop: '20px', textAlign: 'center' }}>
-                    {message}
-                </div>
-                <a
-                    className="App-link"
-                    href="https://docs.genez.io/genezio-documentation/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn Genezio
-                </a>
-            </header>
-        </div>
-    );
+  return (
+    <Router basename="/">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/quickround" element={<Quickround />} />
+        <Route path="/mainround" element={<Mainround />} />
+        <Route path="/scoredisplay" element={<Scoredisplay />} />
+        <Route path="/ranks" element={<Ranks />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/addteam" element={<AdminAddTeam />} />
+        <Route
+          path="/admin/addquestionmainround"
+          element={<AdminAddQuestionMainRound />}
+        />
+        <Route path="/admin/quickround" element={<AdminQuickround />} />
+        <Route path="*" element={<Navigate replace to="/" />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
