@@ -2,7 +2,7 @@ import React from "react";
 import { GiCancel } from "react-icons/gi";
 
 export default function AddQuestion() {
-  const generateNumbers = (n: number) =>
+  const generateNumbers = (n: number): number[] =>
     Array.from({ length: n }, (_, i) => i + 1);
 
   return (
@@ -71,24 +71,6 @@ export default function AddQuestion() {
                 <label className=" text-xl">Answear 6</label>
                 <input
                   placeholder="Answear 6"
-                  type="text"
-                  maxLength={100}
-                  className="text-lg w-72 border-2 border-black rounded-lg p-2 mt-2"
-                />
-              </div>
-              <div className=" flex flex-col">
-                <label className=" text-xl">Answear 7</label>
-                <input
-                  placeholder="Answear 7"
-                  type="text"
-                  maxLength={100}
-                  className="text-lg w-72 border-2 border-black rounded-lg p-2 mt-2"
-                />
-              </div>
-              <div className=" flex flex-col">
-                <label className=" text-xl">Answear 8</label>
-                <input
-                  placeholder="Answear 8"
                   type="text"
                   maxLength={100}
                   className="text-lg w-72 border-2 border-black rounded-lg p-2 mt-2"
