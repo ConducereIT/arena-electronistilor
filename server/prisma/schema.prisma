@@ -43,8 +43,7 @@ model QuickRound {
 
 // Define the data model for the 'leaderboard' table
 model Leaderboard {
-    id         Int      @id @default(autoincrement())
+    id         Int    @id @default(autoincrement())
     playerName String
     score      Int
-    date       DateTime
 }

@@ -16,3 +16,8 @@ export type RegisterResponse = {
     token?: string,
     errorMessage?: string,
 }
+
+export type SessionResponse = {
+    status: string,
+    errorMessage?: string;
+}
