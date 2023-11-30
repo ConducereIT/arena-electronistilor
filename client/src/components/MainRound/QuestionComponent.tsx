@@ -17,13 +17,54 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
   questionTitle,
   getAnswersFromBackend,
 }) => {
-  const [counter, setCounter] = useState(30);
-  const [isRunning, setIsRunning] = useState(false);
-  const [spacePressed, setSpacePressed] = useState(false);
+  const [counter, setCounter] = useState<number>(30);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [spacePressed, setSpacePressed] = useState<boolean>(false);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
-  const intervalRef = useRef<number | undefined>(undefined);
+  const intervalRef = useRef<number>();
   const tickSound = new Audio(tick);
+
+  const toggleTimer = () => setIsRunning((prevIsRunning) => !prevIsRunning);
+  const resetCounter = () => {
+    setIsRunning(false);
+    setCounter(30);
+    setSelectedAnswer(null);
+  };
+
+  const loadAnswers = async () => setAnswers(await getAnswersFromBackend());
+  const toggleAnswer = (index: number) =>
+    setSelectedAnswer((prevSelectedAnswer) =>
+      prevSelectedAnswer === index ? null : index
+    );
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === 'Space' && !spacePressed) {
+        setSpacePressed(true);
+        toggleTimer();
+      }
+
+      if (event.code === 'KeyR' && !spacePressed) {
+        setSpacePressed(true);
+        resetCounter();
+      }
+    };
+
+    const handleKeyUp = (event: KeyboardEvent) => {
+      if (event.code === 'Space' || event.code === 'KeyR') {
+        setSpacePressed(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [spacePressed, toggleTimer, resetCounter]);
 
   useEffect(() => {
     if (isRunning) {
@@ -45,54 +86,10 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
     return () => clearInterval(intervalRef.current!);
   }, [isRunning]);
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.code === 'Space' && !isRunning && !spacePressed) {
-        setSpacePressed(true);
-        toggleTimer();
-      }
-    };
-
-    const handleKeyUp = (event: KeyboardEvent) => {
-      if (event.code === 'Space') {
-        setSpacePressed(false);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
-    };
-  }, [isRunning, spacePressed]);
-
-  const toggleTimer = () => {
-    setIsRunning((prevIsRunning) => !prevIsRunning);
-  };
-
-  const resetCounter = () => {
-    setIsRunning(false);
-    setCounter(30);
-    setSelectedAnswer(null);
-  };
-
-  const loadAnswers = async () => {
-    const answersFromBackend = await getAnswersFromBackend();
-    setAnswers(answersFromBackend);
-  };
-
-  const toggleAnswer = (index: number) => {
-    setSelectedAnswer((prevSelectedAnswer) =>
-      prevSelectedAnswer === index ? null : index
-    );
-  };
-
   return (
     <div className="p-4 rounded-md bg-gray-300">
       <div className="text-center">
-        <div className="rounded-full bg-blue-500 p-2 mb-4 inline-block">
+        <div className="rounded-full p-2 mb-4 inline-block">
           <h2 className="text-2xl font-bold text-white">{questionTitle}</h2>
         </div>
 
@@ -104,24 +101,12 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
               styles={buildStyles({
                 strokeLinecap: 'round',
                 textSize: '16px',
-                pathColor: 'bg-blue-500', // Change to your desired color
-                textColor: 'text-white', // Change to your desired color
+                pathColor: isRunning ? '#4285f4' : '#d50000', // Blue when running, red when paused
+                textColor: 'text-white',
                 trailColor: 'bg-gray-300',
               })}
             />
           </div>
-          <button
-            className={`bg-${isRunning ? 'red' : 'blue'}-500 text-white px-4 py-2 rounded ml-2`}
-            onClick={toggleTimer}
-          >
-            {isRunning ? 'Stop' : 'Start'}
-          </button>
-          <button
-            className="bg-red-500 text-white px-4 py-2 rounded ml-2"
-            onClick={resetCounter}
-          >
-            Reset
-          </button>
         </div>
       </div>
 
@@ -129,8 +114,7 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
         <button className="bg-green-500 text-white px-4 py-2 rounded" onClick={loadAnswers}>
           Load Answers
         </button>
-        
-        {/* Grid for answers with 2 columns and 3 rows */}
+
         <div className="grid grid-cols-2 grid-rows-3 gap-4 mt-4">
           {answers.map((answer) => (
             <div
