@@ -1,5 +1,9 @@
 import React from "react";
-
-export default function Login() {
-  return <div>Login.view</div>;
+import Login from "../components/Login/Login";
+export default function LoginView() {
+  return (
+    <>
+      <Login />
+    </>
+  );
 }
